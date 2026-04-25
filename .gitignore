@@ -1,0 +1,15 @@
+.venv/
+.pip-cache/
+.pip-temp/
+.npm-cache/
+__pycache__/
+*.py[cod]
+*.log
+db.sqlite3
+media/
+staticfiles/
+.env
+node_modules/
+dist/
+.pytest_cache/
+.DS_Store
