@@ -80,7 +80,29 @@ Valid actions are `start_review`, `approve`, `reject`, and `request_more_info`.
 
 ## Deployment notes
 
-This repo is ready for a free split deployment: backend on Render/Railway/Fly with SQLite or Postgres, frontend on Vercel/Netlify. Run `python manage.py migrate && python manage.py seed_kyc` on the backend service before sharing the URL.
+The simplest live deployment is one Docker web service. The Dockerfile builds the React frontend, serves it from Django/WhiteNoise, runs migrations, seeds demo data, and starts Gunicorn.
 
-I could not create a live deployment from this local workspace because no provider credentials were available.
+Render setup:
 
+1. Go to Render and create `New > Web Service`.
+2. Connect this GitHub repo: `https://github.com/harsh123hz/haaaa.git`.
+3. Set `Language` to `Docker`.
+4. Use branch `main` and root directory blank.
+5. Add environment variables:
+   - `DJANGO_SECRET_KEY`: any long random string
+   - `DJANGO_DEBUG`: `0`
+   - `DJANGO_ALLOWED_HOSTS`: `.onrender.com,localhost,127.0.0.1`
+6. Create the service and wait for deploy to finish.
+
+The live URL will serve both the frontend and API:
+
+- Frontend: `https://your-service.onrender.com/`
+- API: `https://your-service.onrender.com/api/v1/`
+
+Seeded login tokens on the live service are the same:
+
+- `merchant-draft-token`
+- `merchant-review-token`
+- `reviewer-token`
+
+This demo uses SQLite inside the service container. That is fine for the assignment poke-around flow, but production should use Postgres and object storage for uploaded documents.
